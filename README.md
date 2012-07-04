@@ -1,5 +1,5 @@
-TantoCuore
-==========
+MuchoCorazon
+============
 
 This is a webapp to play the Tanto Cuore deck building game. The rulebook for the game can be found here http://tantocuore.com/rule/tc1rulebook.pdf
 
