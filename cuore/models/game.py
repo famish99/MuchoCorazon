@@ -1,3 +1,6 @@
+"""
+Module for game models
+"""
 from cuore.models.player import Player
 from django.db import models
 import caching.base
@@ -9,6 +12,7 @@ class Game(caching.base.CachingMixin, models.Model):
     """
 
     players = models.ManyToManyField(Player)
+    stacks = models.ManyToManyField(Deck)
 
     objects = caching.base.CachingManager()
 

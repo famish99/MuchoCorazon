@@ -1,3 +1,7 @@
+"""
+Module for player models
+"""
+from cuore.models.deck import Deck
 from django.db import models
 import caching.base
 
@@ -6,6 +10,8 @@ class Player(caching.base.CachingMixin, models.Model):
     """
     Django model to store player info
     """
+
+    decks = models.ManyToManyField(Deck)
 
     objects = caching.base.CachingManager()
 
