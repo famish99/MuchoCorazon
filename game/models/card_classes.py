@@ -53,7 +53,7 @@ class ThreeLoveCard(LoveCard):
 	card_name = "3 Love"
 
 
-class EventCard(EventCard):
+class EventCard(Card):
 	"""
 	Base class for Illness/Bad Habits
 	"""
