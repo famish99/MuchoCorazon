@@ -20,5 +20,5 @@ class Card(caching.base.CachingMixin, models.Model):
 
     class Meta:
         """ Metadata class for Card """
-        app_label = "cuore"
+        app_label = "game"
         verbose_name = "Card"

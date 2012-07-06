@@ -1,19 +1,19 @@
 """
 Module for game models
 """
-from cuore.models.player import Player
-from cuore.models.deck import Deck
+from game.models.player import Player
+from game.models.deck import Deck
 from django.db import models
 import caching.base
 
 
-class Game(caching.base.CachingMixin, models.Model):
+class Session(caching.base.CachingMixin, models.Model):
     """
     Django model to store game state
     """
 
     players = models.ForeignKey(Player)
-    stacks = models.ForeignKey(Deck, related_name='+')
+    stacks = models.ForeignKey(Deck)
     turn = models.PositiveSmallIntegerField()
     phase = models.PositiveSmallIntegerField()
 
@@ -24,5 +24,5 @@ class Game(caching.base.CachingMixin, models.Model):
 
     class Meta:
         """ Metadata class for Player """
-        app_label = "cuore"
+        app_label = "game"
         verbose_name = "Game session"

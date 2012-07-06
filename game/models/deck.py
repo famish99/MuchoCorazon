@@ -1,7 +1,7 @@
 """
 Deck module
 """
-from cuore.models.card import Card
+from game.models.card import Card
 from django.db import models
 import caching.base
 
@@ -27,5 +27,5 @@ class Deck(caching.base.CachingMixin, models.Model):
 
     class Meta:
         """ Metadata class for Deck """
-        app_label = "cuore"
+        app_label = "game"
         verbose_name = "Deck"
