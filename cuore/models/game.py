@@ -2,6 +2,7 @@
 Module for game models
 """
 from cuore.models.player import Player
+from cuore.models.deck import Deck
 from django.db import models
 import caching.base
 
@@ -11,8 +12,10 @@ class Game(caching.base.CachingMixin, models.Model):
     Django model to store game state
     """
 
-    players = models.ManyToManyField(Player)
-    stacks = models.ManyToManyField(Deck)
+    players = models.ForeignKey(Player)
+    stacks = models.ForeignKey(Deck, related_name='+')
+    turn = models.PositiveSmallIntegerField()
+    phase = models.PositiveSmallIntegerField()
 
     objects = caching.base.CachingManager()
 

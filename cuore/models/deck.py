@@ -5,14 +5,20 @@ from cuore.models.card import Card
 from django.db import models
 import caching.base
 
+SHOW_CHOICES = (
+        ("show_none", "Show None"),
+        ("show_top", "Show Top"),
+        ("show_all", "Show All"),
+        )
 
 class Deck(caching.base.CachingMixin, models.Model):
     """
     Deck class
     """
 
+    cards = models.ForeignKey(Card)
     name = models.CharField(max_length=16)
-    cards = models.ManyToManyField(Card)
+    show_prop = models.CharField(max_length=16, choices=SHOW_CHOICES)
 
     objects = caching.base.CachingManager()
 

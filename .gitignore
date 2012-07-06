@@ -2,6 +2,7 @@
 *.pot
 *.pyc
 .*.swp
+*.db
 .project
 .pydevproject
 local_settings.py
