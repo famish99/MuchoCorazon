@@ -11,7 +11,7 @@ class Player(caching.base.CachingMixin, models.Model):
     Django model to store player info
     """
 
-    decks = models.ForeignKey(Deck, related_name='+')
+    decks = models.ForeignKey(Deck)
 
     objects = caching.base.CachingManager()
 
