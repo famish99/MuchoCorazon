@@ -7,3 +7,7 @@ This is a webapp to play the Tanto Cuore deck building game. The rulebook for th
 Coding Guidelines
 =================
 For coding guidelines, please refer to https://github.com/famish99/TantoCuore/wiki/Coding-Guidelines
+
+Django Tutorial
+===============
+A good place to get started on how to use Django is here: https://docs.djangoproject.com/en/dev/intro/tutorial01/
