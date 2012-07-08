@@ -1,4 +1,4 @@
-# Django settings for tanto project.
+# Django settings for MuchoCorazon project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -100,10 +100,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'tanto.urls'
+ROOT_URLCONF = 'manager.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'tanto.wsgi.application'
+WSGI_APPLICATION = 'manager.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
