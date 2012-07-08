@@ -1,26 +1,37 @@
 """
 Module for game models
 """
-from game.models.player import Player
-from game.models.deck import Deck
 from django.db import models
 import caching.base
 
 
-class Session(caching.base.CachingMixin, models.Model):
+class DeckUser(caching.base.CachingMixin, models.Model):
     """
-    Django model to store game state
+    Class to get around the limitation that Deck can't be ForeignKey'd
+    to either Session or Player
     """
-
-    players = models.ForeignKey(Player)
-    stacks = models.ForeignKey(Deck)
-    turn = models.PositiveSmallIntegerField()
-    phase = models.PositiveSmallIntegerField()
 
     objects = caching.base.CachingManager()
 
     def __init__(self, *args, **kwargs):
-        super(Game, self).__init__(*args, **kwargs)
+        super(DeckUser, self).__init__(*args, **kwargs)
+
+    class Meta:
+        """ Metadata class for Player """
+        app_label = "game"
+        verbose_name = "Deck User"
+
+
+class Session(DeckUser):
+    """
+    Django model to store game state
+    """
+
+    turn = models.PositiveSmallIntegerField()
+    phase = models.PositiveSmallIntegerField()
+
+    def __init__(self, *args, **kwargs):
+        super(Session, self).__init__(*args, **kwargs)
 
     class Meta:
         """ Metadata class for Player """

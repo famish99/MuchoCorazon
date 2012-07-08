@@ -1,8 +1,9 @@
 """
 Deck module
 """
-from game.models.card import Card
+from game.models.session import DeckUser
 from django.db import models
+from picklefield.fields import PickledObjectField
 import caching.base
 
 SHOW_CHOICES = (
@@ -16,7 +17,8 @@ class Deck(caching.base.CachingMixin, models.Model):
     Deck class
     """
 
-    cards = models.ForeignKey(Card)
+    user = models.ForeignKey(DeckUser, related_name="decks")
+    card_list = PickledObjectField()
     name = models.CharField(max_length=16)
     show_prop = models.CharField(max_length=16, choices=SHOW_CHOICES)
 

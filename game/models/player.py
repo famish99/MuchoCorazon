@@ -1,19 +1,17 @@
 """
 Module for player models
 """
-from game.models.deck import Deck
+from game.models.session import DeckUser, Session
 from django.db import models
 import caching.base
 
 
-class Player(caching.base.CachingMixin, models.Model):
+class Player(DeckUser):
     """
     Django model to store player info
     """
 
-    decks = models.ForeignKey(Deck)
-
-    objects = caching.base.CachingManager()
+    session = models.ForeignKey(Session, related_name="players")
 
     def __init__(self, *args, **kwargs):
         super(Player, self).__init__(*args, **kwargs)
