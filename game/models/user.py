@@ -1,7 +1,6 @@
 """
 Module for user models
 """
-from game.models.player import Player
 from django.db import models
 import caching.base
 
@@ -12,7 +11,6 @@ class User(caching.base.CachingMixin, models.Model):
     """
 
     name = models.CharField(max_length=16)
-    players = models.ForeignKey(Player)
 
     objects = caching.base.CachingManager()
 
