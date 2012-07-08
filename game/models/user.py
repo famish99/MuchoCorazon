@@ -10,7 +10,7 @@ class User(caching.base.CachingMixin, models.Model):
     Django model to store user info
     """
 
-    name = models.CharField(max_length=16)
+    name = models.CharField(max_length=32)
 
     objects = caching.base.CachingManager()
 

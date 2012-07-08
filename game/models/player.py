@@ -12,7 +12,7 @@ class Player(DeckUser):
     Django model to store player info
     """
 
-    users = models.ForeignKey(User, related_name="players")
+    user = models.ForeignKey(User, related_name="players")
     session = models.ForeignKey(Session, related_name="players")
 
     def __init__(self, *args, **kwargs):
