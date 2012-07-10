@@ -11,7 +11,7 @@ class Card(caching.base.CachingMixin, models.Model):
     Django model to store a single card
     """
 
-    deck = models.ForeignKey(Deck, related_name="cards")
+    deck = models.ForeignKey(Deck, related_name="cards", null=True)
     name = models.CharField(max_length=32)
     image = models.ImageField(upload_to="card_images")
 

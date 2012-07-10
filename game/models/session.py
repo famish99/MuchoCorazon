@@ -55,8 +55,8 @@ class Session(DeckUser):
     Django model to store game state
     """
 
-    turn = models.PositiveSmallIntegerField()
-    phase = models.PositiveSmallIntegerField()
+    turn = models.PositiveSmallIntegerField(null=True)
+    phase = models.PositiveSmallIntegerField(null=True)
 
     def __init__(self, *args, **kwargs):
         super(Session, self).__init__(*args, **kwargs)
