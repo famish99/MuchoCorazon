@@ -45,7 +45,7 @@ class DeckUser(caching.base.CachingMixin, models.Model):
         return ptr
 
     class Meta:
-        """ Metadata class for Player """
+        """ Metadata class for DeckUser """
         app_label = "game"
         verbose_name = "Deck User"
 
