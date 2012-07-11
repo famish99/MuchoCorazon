@@ -1,8 +1,8 @@
 """
 Module containing the card model
 """
-#from game.models.deck import Deck
 from django.db import models
+from picklefield.fields import PickledObjectField
 import caching.base
 
 
@@ -49,6 +49,27 @@ class CardUser(caching.base.CachingMixin, models.Model):
         """ Metadata class for CardUser """
         app_label = "game"
         verbose_name = "Card User"
+
+
+class CardLibrary(CardUser):
+    """
+    For a whole game module, store all the cards it has available.
+    This should not be instantiated for each game session, but only
+    when a new game module is added e.g. Tanto Cuore, Magic the Gathering,
+    Poker, etc.
+    """
+
+    name = models.CharField(max_length=32)
+    card_dict = PickledObjectField()
+
+    def __init__(self, *args, **kwargs):
+        super(CardUser, self).__init__(*args, **kwargs)
+        self.card_dict = {}
+
+    class Meta:
+        """ Metadata class for CardLibrary """
+        app_label = "game"
+        verbose_name = "Card Library"
 
 
 class Card(caching.base.CachingMixin, models.Model):

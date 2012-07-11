@@ -6,7 +6,7 @@ Unit testing for the app
 from game.models.user import User
 from game.models.player import Player
 from game.models.deck import Deck
-from game.models.card import CardUser, Card
+from game.models.card import CardUser, CardLibrary, Card
 from game.models.session import DeckUser, Session
 from django.test import TestCase
 
@@ -49,6 +49,7 @@ class CardUserTestCase(TestCase):
     def setUp(self):
         self.session = Session.objects.create()
         self.deck = Deck.objects.create(name="hand", user=self.session)
+        self.lib = CardLibrary.objects.create(name="Seitokai no Ichizon")
         self.deck.save()
 
     def test_class_name(self):
@@ -56,6 +57,7 @@ class CardUserTestCase(TestCase):
         Check classname saving
         """
         self.assertEqual(self.deck.classname, "CardUser.Deck")
+        self.assertEqual(self.lib.classname, "CardUser.CardLibrary")
 
     def test_class_trace(self):
         """
@@ -64,6 +66,9 @@ class CardUserTestCase(TestCase):
         self.assertEqual(
                 CardUser.objects.get(id=self.deck.id).get_class(),
                 self.deck)
+        self.assertEqual(
+                CardUser.objects.get(id=self.lib.id).get_class(),
+                self.lib)
 
 
 class DeckTestCase(TestCase):
