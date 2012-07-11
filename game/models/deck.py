@@ -2,8 +2,10 @@
 Deck module
 """
 from game.models.session import DeckUser
+from game.models.card import CardUser
 from django.db import models
 from picklefield.fields import PickledObjectField
+from random import shuffle
 import caching.base
 
 SHOW_CHOICES = (
@@ -12,7 +14,7 @@ SHOW_CHOICES = (
         ("all", "Show All"),
         )
 
-class Deck(caching.base.CachingMixin, models.Model):
+class Deck(CardUser):
     """
     Deck class
     """
@@ -42,6 +44,8 @@ class Deck(caching.base.CachingMixin, models.Model):
             self.card_list.append(input_card.id)
         else:
             self.card_list.insert(0, input_card.id)
+        if kwargs.get("save"):
+            self.save()
 
     def remove_card(self, input_card, **kwargs):
         """
@@ -63,13 +67,16 @@ class Deck(caching.base.CachingMixin, models.Model):
             card_id = self.card_list.pop(0)
         card = self.cards.get(id=card_id)
         self.cards.remove(card)
+        if kwargs.get("save"):
+            self.save()
         return card
 
     def shuffle_deck(self, **kwargs):
         """
         Shuffle deck order
         """
-        pass
+        shuffle(self.card_list)
+        self.save()
 
     class Meta:
         """ Metadata class for Deck """

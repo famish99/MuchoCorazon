@@ -6,7 +6,7 @@ Unit testing for the app
 from game.models.user import User
 from game.models.player import Player
 from game.models.deck import Deck
-from game.models.card import Card
+from game.models.card import CardUser, Card
 from game.models.session import DeckUser, Session
 from django.test import TestCase
 
@@ -39,6 +39,32 @@ class DeckUserTestCase(TestCase):
         self.assertEqual(
                 DeckUser.objects.get(id=self.session.id).get_class(),
                 self.session)
+
+
+class CardUserTestCase(TestCase):
+    """
+    Test associated DeckUser features
+    """
+
+    def setUp(self):
+        self.session = Session.objects.create()
+        self.deck = Deck.objects.create(name="hand", user=self.session)
+        self.deck.save()
+
+    def test_class_name(self):
+        """
+        Check classname saving
+        """
+        self.assertEqual(self.deck.classname, "CardUser.Deck")
+
+    def test_class_trace(self):
+        """
+        Check classname tracing
+        """
+        self.assertEqual(
+                CardUser.objects.get(id=self.deck.id).get_class(),
+                self.deck)
+
 
 class DeckTestCase(TestCase):
     """
