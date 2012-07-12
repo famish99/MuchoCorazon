@@ -69,10 +69,13 @@ class Deck(CardUser):
         @return: A card from the (top | bottom) of the deck
         """
         top = kwargs.get("top", True)
-        if top:
-            card_id = self._card_list.pop()
+        if kwargs.get("index"):
+            index = kwargs.get("index")
+        elif not top:
+            index = 0
         else:
-            card_id = self._card_list.pop(0)
+            index = -1
+        card_id = self._card_list.pop(index)
         card = self.cards.get(id=card_id)
         self.cards.remove(card)
         if kwargs.get("save"):
