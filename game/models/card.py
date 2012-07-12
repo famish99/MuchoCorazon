@@ -60,11 +60,11 @@ class CardLibrary(CardUser):
     """
 
     name = models.CharField(max_length=32)
-    card_dict = PickledObjectField()
+    _card_dict = PickledObjectField()
 
     def __init__(self, *args, **kwargs):
         super(CardUser, self).__init__(*args, **kwargs)
-        self.card_dict = {}
+        self._card_dict = {}
 
     class Meta:
         """ Metadata class for CardLibrary """
