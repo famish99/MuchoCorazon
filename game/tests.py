@@ -93,7 +93,7 @@ class DeckTestCase(TestCase):
 
     def setUp(self):
         self.session = Session.objects.create()
-        self.deck = Deck.objects.create(name="hand", user=self.session)
+        self.deck = Deck.objects.create(name="Sugisaki Ken's harem", user=self.session)
         self.deck.save()
         self.card_list = [
                 Card.objects.create(name="Sakurano Kurimu"),
@@ -101,6 +101,8 @@ class DeckTestCase(TestCase):
                 Card.objects.create(name="Shiina Minatsu"),
                 Card.objects.create(name="Shiina Mafuyu"),
             ]
+        self.full_deck_str = \
+            "Sugisaki Ken's harem: Sakurano Kurimu, Akaba Chizuru, Shiina Minatsu, Shiina Mafuyu"
 
     def test_repr(self):
         """
@@ -108,8 +110,18 @@ class DeckTestCase(TestCase):
         """
         for card in self.card_list:
             self.deck.add_card(card)
-        self.assertEqual(self.deck.__unicode__(),
-            "hand: Sakurano Kurimu, Akaba Chizuru, Shiina Minatsu, Shiina Mafuyu")
+        self.assertEqual(self.deck.__unicode__(), self.full_deck_str)
+
+    def test_index_add_remove(self):
+        """
+        Check for insert/remove to index location
+        """
+        for card in self.card_list:
+            self.deck.add_card(card)
+        card = self.deck.pop_card(index=2) # Minatsu helping the baseball team
+        self.assertEqual(card, self.card_list[2])
+        self.deck.add_card(card, index=2) # Coming back to the harem
+        self.assertEqual(self.deck.card_list, self.card_list)
 
     def test_push_pop(self):
         """
@@ -117,6 +129,7 @@ class DeckTestCase(TestCase):
         """
         for card in self.card_list:
             self.deck.add_card(card)
+        self.assertEqual(self.deck.card_list, self.card_list)
         self.card_list.reverse()
         for card in self.card_list:
             self.assertEqual(self.deck.pop_card(), card)
