@@ -47,10 +47,13 @@ class Deck(CardUser):
         """
         self.cards.add(input_card)
         top = kwargs.get("top", True)
-        if top:
-            self._card_list.append(input_card.id)
+        if kwargs.get("index"):
+            index = kwargs.get("index")
+        elif not top:
+            index = 0
         else:
-            self._card_list.insert(0, input_card.id)
+            index = len(self._card_list)
+        self._card_list.insert(index, input_card.id)
         if kwargs.get("save"):
             self.save()
 
