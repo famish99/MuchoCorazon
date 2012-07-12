@@ -5,7 +5,7 @@ from game.models.session import DeckUser
 from game.models.card import CardUser
 from django.db import models
 from picklefield.fields import PickledObjectField
-from random import shuffle
+import random
 import caching.base
 
 SHOW_CHOICES = (
@@ -30,6 +30,13 @@ class Deck(CardUser):
     def __init__(self, *args, **kwargs):
         super(Deck, self).__init__(*args, **kwargs)
         self._card_list = []
+    
+    def __unicode__(self):
+        join_str = ', '
+        repr_str = "%s: %s" % (self.name, join_str.join(
+                [ card.name for card in self.card_list ])
+                )
+        return repr_str
 
     def add_card(self, input_card, **kwargs):
         """
@@ -76,7 +83,7 @@ class Deck(CardUser):
         """
         Shuffle deck order
         """
-        shuffle(self._card_list)
+        random.shuffle(self._card_list)
         self.save()
 
     @property

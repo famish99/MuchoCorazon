@@ -11,6 +11,21 @@ from game.models.session import DeckUser, Session
 from django.test import TestCase
 
 
+class CardTestCase(TestCase):
+    """
+    Tests associated Card features
+    """
+
+    def setUp(self):
+        self.card = Card.objects.create(name="Shiina Minatsu")
+
+    def test_repr(self):
+        """
+        Check unicode representation
+        """
+        self.assertEqual(self.card.__unicode__(), "Shiina Minatsu")
+
+
 class DeckUserTestCase(TestCase):
     """
     Test associated DeckUser features
@@ -86,6 +101,15 @@ class DeckTestCase(TestCase):
                 Card.objects.create(name="Shiina Minatsu"),
                 Card.objects.create(name="Shiina Mafuyu"),
             ]
+
+    def test_repr(self):
+        """
+        Check the deck unicode representation
+        """
+        for card in self.card_list:
+            self.deck.add_card(card)
+        self.assertEqual(self.deck.__unicode__(),
+            "hand: Sakurano Kurimu, Akaba Chizuru, Shiina Minatsu, Shiina Mafuyu")
 
     def test_push_pop(self):
         """
