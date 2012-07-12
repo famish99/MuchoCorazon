@@ -114,3 +114,13 @@ class DeckTestCase(TestCase):
             self.deck.add_card(card)
         for card in self.card_list:
             self.assertEqual(self.deck.pop_card(top=False), card)
+
+    def test_shuffle(self):
+        """
+        Test validity of shuffle
+        """
+        for card in self.card_list:
+            self.deck.add_card(card)
+        self.assertEqual(self.deck.card_list, self.card_list)
+        self.deck.shuffle()
+        self.assertNotEqual(self.deck.card_list, self.card_list)

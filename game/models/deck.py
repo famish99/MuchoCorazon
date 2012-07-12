@@ -20,7 +20,7 @@ class Deck(CardUser):
     """
 
     user = models.ForeignKey(DeckUser, related_name="decks")
-    card_list = PickledObjectField()
+    _card_list = PickledObjectField()
     name = models.CharField(max_length=16)
     show_prop = models.CharField(
             max_length=16, choices=SHOW_CHOICES, null=True)
@@ -29,7 +29,7 @@ class Deck(CardUser):
 
     def __init__(self, *args, **kwargs):
         super(Deck, self).__init__(*args, **kwargs)
-        self.card_list = []
+        self._card_list = []
 
     def add_card(self, input_card, **kwargs):
         """
@@ -41,9 +41,9 @@ class Deck(CardUser):
         self.cards.add(input_card)
         top = kwargs.get("top", True)
         if top:
-            self.card_list.append(input_card.id)
+            self._card_list.append(input_card.id)
         else:
-            self.card_list.insert(0, input_card.id)
+            self._card_list.insert(0, input_card.id)
         if kwargs.get("save"):
             self.save()
 
@@ -59,24 +59,34 @@ class Deck(CardUser):
 
         @param top: True: remove from top of the deck,
             False: remove from bottom of deck
+        @return: A card from the (top | bottom) of the deck
         """
         top = kwargs.get("top", True)
         if top:
-            card_id = self.card_list.pop()
+            card_id = self._card_list.pop()
         else:
-            card_id = self.card_list.pop(0)
+            card_id = self._card_list.pop(0)
         card = self.cards.get(id=card_id)
         self.cards.remove(card)
         if kwargs.get("save"):
             self.save()
         return card
 
-    def shuffle_deck(self, **kwargs):
+    def shuffle(self, **kwargs):
         """
         Shuffle deck order
         """
-        shuffle(self.card_list)
+        shuffle(self._card_list)
         self.save()
+
+    @property
+    def card_list(self, **kwargs):
+        """
+        Present a full list of cards in order
+
+        @return: A list of card objects in deck order
+        """
+        return [ self.cards.get(id=card_id) for card_id in self._card_list ]
 
     class Meta:
         """ Metadata class for Deck """

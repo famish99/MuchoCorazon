@@ -86,6 +86,9 @@ class Card(caching.base.CachingMixin, models.Model):
     def __init__(self, *args, **kwargs):
         super(Card, self).__init__(*args, **kwargs)
 
+    def __unicode__(self):
+        return self.name
+
     class Meta:
         """ Metadata class for Card """
         app_label = "game"
