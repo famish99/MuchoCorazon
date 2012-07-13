@@ -72,18 +72,35 @@ class Deck(CardUser):
         @param index: Insert cards at index location, overrides top parameter
         """
         if kwargs.get("queue", False):
-            input_cards.reverse # Yeah it doesn't make sense to me either
+            input_cards.reverse 
         for card in input_cards:
             self.insert_card(card, **kwargs)
 
-    def get_card(self, card_index, **kwargs):
+    def get_card(self, *args, **kwargs):
         """
-        Pick out card at index
+        Pick out card at index.
+        This can also be accomplished by doing card_list[index], but for
+        larger lists, this method would be more efficient.
 
-        @param card_index: integer location of the card
+        @param index: integer location of the card (first argument)
+        @param end: integer location of last card to slice (optional)
+        @param step: integer stepping of cards to slice (optional)
         @return: The Card object at the location
         """
-        pass
+        index = args[0]
+        if len(args) == 2:
+            end = args[1]
+            return [ self.cards.get(id=index)
+                    for index in self._card_list[index:end]
+                    ]
+        elif len(args) == 3:
+            end = args[1]
+            step = args[2]
+            return [ self.cards.get(id=index)
+                    for index in self._card_list[index:end:step]
+                    ]
+        else:
+            return self.cards.get(id=self._card_list[index])
 
     def search_card(self, input_card, **kwargs):
         """

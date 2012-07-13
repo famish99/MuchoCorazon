@@ -70,7 +70,6 @@ class DeckTestCase(TestCase):
         for card in self.card_list:
             self.deck.insert_card(card)
         self.card_list.reverse()
-        self.assertEqual(self.deck.card_list, self.card_list)
         self.deck.shuffle()
         self.assertNotEqual(self.deck.card_list, self.card_list)
 
@@ -98,8 +97,7 @@ class DeckTestCase(TestCase):
         # Test removing all cards in stack fashion
         ret_deck = self.deck.remove_cards(len(self.card_list))
         self.assertEqual(self.deck.card_list, [])
-        ret_deck.reverse()
-        self.assertEqual(ret_deck, self.card_list)
+        self.assertEqual(ret_deck, rev_list)
         # Test removing in a queue fashion
         self.deck.insert_cards(self.card_list)
         ret_deck = self.deck.remove_cards(len(self.card_list), top=False)
@@ -117,3 +115,21 @@ class DeckTestCase(TestCase):
                 self.card_list[2],
                 ]
         self.assertEqual(self.deck.card_list, check_list)
+    
+    def test_get_card(self):
+        """
+        Check fetching a single card
+        """
+        self.deck.insert_cards(self.card_list*25)
+        self.assertEqual(self.deck.get_card(1), self.card_list[2])
+        check_list = [
+                self.card_list[2],
+                self.card_list[1]
+                ]
+        self.assertEqual(self.deck.get_card(1, 3), check_list)
+        check_list = [
+                self.card_list[3],
+                self.card_list[1]
+                ]
+        self.assertEqual(self.deck.get_card(0, 4, 2), check_list)
+
