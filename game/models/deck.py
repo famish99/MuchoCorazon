@@ -19,6 +19,8 @@ SHOW_CHOICES = (
 class Deck(CardUser):
     """
     Deck class
+    
+    Index 0 represents the top of the deck
     """
 
     user = models.ForeignKey(DeckUser, related_name="decks")
@@ -45,7 +47,7 @@ class Deck(CardUser):
         Add card to the deck
 
         @param top: True: insert to top of the deck,
-            False: insert to bottom of deck
+            False: insert to bottom of deck (default True)
         @param index: Remove card at index location, overrides top parameter
         """
         self.cards.add(input_card)
@@ -53,12 +55,26 @@ class Deck(CardUser):
         if kwargs.get("index"):
             index = kwargs.get("index")
         elif not top:
-            index = 0
-        else:
             index = len(self._card_list)
+        else:
+            index = 0
         self._card_list.insert(index, input_card.id)
         if kwargs.get("save"):
             self.save()
+
+    def insert_cards(self, input_cards, **kwargs):
+        """
+        Add card to the deck
+
+        @param top: True: insert to top of the deck,
+            False: insert to bottom of deck (default True)
+        @param queue: For whatever reason you want order preserved on add
+        @param index: Insert cards at index location, overrides top parameter
+        """
+        if kwargs.get("queue", False):
+            input_cards.reverse # Yeah it doesn't make sense to me either
+        for card in input_cards:
+            self.insert_card(card, **kwargs)
 
     def get_card(self, card_index, **kwargs):
         """
@@ -77,26 +93,34 @@ class Deck(CardUser):
 
     def remove_card(self, **kwargs):
         """
-        Remove card from the (top | bottom) of the deck
+        Remove card from the deck
 
         @param top: True: remove from top of the deck,
-            False: remove from bottom of deck
+            False: remove from bottom of deck (default True)
         @param index: Remove card at index location, overrides top parameter
-        @return: A card from the (top | bottom) of the deck
+        @return: A card from the deck
         """
         top = kwargs.get("top", True)
         if kwargs.get("index"):
             index = kwargs.get("index")
         elif not top:
-            index = 0
-        else:
             index = -1
+        else:
+            index = 0
         card_id = self._card_list.pop(index)
         card = self.cards.get(id=card_id)
         self.cards.remove(card)
         if kwargs.get("save"):
             self.save()
         return card
+
+    def remove_cards(self, num_cards, **kwargs):
+        """
+        @param num_cards: number of cards to remove from the deck
+        @param index: Remove card at index location
+        @return: A card from the deck
+        """
+        return [ self.remove_card(**kwargs) for cnt in range(num_cards) ]
 
     def shuffle(self, **kwargs):
         """
@@ -106,7 +130,7 @@ class Deck(CardUser):
         self.save()
 
     @property
-    def card_list(self, **kwargs):
+    def card_list(self):
         """
         Present a full list of cards in order
 
