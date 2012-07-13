@@ -8,11 +8,13 @@ from picklefield.fields import PickledObjectField
 import random
 import caching.base
 
+
 SHOW_CHOICES = (
         ("none", "Show None"),
         ("top", "Show Top"),
         ("all", "Show All"),
         )
+
 
 class Deck(CardUser):
     """
@@ -38,12 +40,13 @@ class Deck(CardUser):
                 )
         return repr_str
 
-    def add_card(self, input_card, **kwargs):
+    def insert_card(self, input_card, **kwargs):
         """
         Add card to the deck
 
         @param top: True: insert to top of the deck,
             False: insert to bottom of deck
+        @param index: Remove card at index location, overrides top parameter
         """
         self.cards.add(input_card)
         top = kwargs.get("top", True)
@@ -57,18 +60,28 @@ class Deck(CardUser):
         if kwargs.get("save"):
             self.save()
 
-    def remove_card(self, input_card, **kwargs):
+    def get_card(self, card_index, **kwargs):
         """
-        Remove specific card from the deck
+        Pick out card at index
+
+        @param card_index: integer location of the card
+        @return: The Card object at the location
         """
         pass
 
-    def pop_card(self, **kwargs):
+    def search_card(self, input_card, **kwargs):
+        """
+        Search for specific card from the deck
+        """
+        pass
+
+    def remove_card(self, **kwargs):
         """
         Remove card from the (top | bottom) of the deck
 
         @param top: True: remove from top of the deck,
             False: remove from bottom of deck
+        @param index: Remove card at index location, overrides top parameter
         @return: A card from the (top | bottom) of the deck
         """
         top = kwargs.get("top", True)

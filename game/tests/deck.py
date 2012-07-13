@@ -30,7 +30,7 @@ class DeckTestCase(TestCase):
         Check the deck unicode representation
         """
         for card in self.card_list:
-            self.deck.add_card(card)
+            self.deck.insert_card(card)
         self.assertEqual(self.deck.__unicode__(), self.full_deck_str)
 
     def test_index_add_remove(self):
@@ -38,10 +38,10 @@ class DeckTestCase(TestCase):
         Check for insert/remove to index location
         """
         for card in self.card_list:
-            self.deck.add_card(card)
-        card = self.deck.pop_card(index=2) # Minatsu helping the baseball team
+            self.deck.insert_card(card)
+        card = self.deck.remove_card(index=2) # Minatsu helping the baseball team
         self.assertEqual(card, self.card_list[2])
-        self.deck.add_card(card, index=2) # Coming back to the harem
+        self.deck.insert_card(card, index=2) # Coming back to the harem
         self.assertEqual(self.deck.card_list, self.card_list)
 
     def test_push_pop(self):
@@ -49,36 +49,36 @@ class DeckTestCase(TestCase):
         Check deck push/pop
         """
         for card in self.card_list:
-            self.deck.add_card(card)
+            self.deck.insert_card(card)
         self.assertEqual(self.deck.card_list, self.card_list)
         self.card_list.reverse()
         for card in self.card_list:
-            self.assertEqual(self.deck.pop_card(), card)
+            self.assertEqual(self.deck.remove_card(), card)
         for card in self.card_list:
-            self.deck.add_card(card, top=False)
+            self.deck.insert_card(card, top=False)
         self.card_list.reverse()
         for card in self.card_list:
-            self.assertEqual(self.deck.pop_card(top=False), card)
+            self.assertEqual(self.deck.remove_card(top=False), card)
 
     def test_enqueue_dequeue(self):
         """
         Check deck enqueue/dequeue
         """
         for card in self.card_list:
-            self.deck.add_card(card, top=False)
+            self.deck.insert_card(card, top=False)
         for card in self.card_list:
-            self.assertEqual(self.deck.pop_card(), card)
+            self.assertEqual(self.deck.remove_card(), card)
         for card in self.card_list:
-            self.deck.add_card(card)
+            self.deck.insert_card(card)
         for card in self.card_list:
-            self.assertEqual(self.deck.pop_card(top=False), card)
+            self.assertEqual(self.deck.remove_card(top=False), card)
 
     def test_shuffle(self):
         """
         Test validity of shuffle
         """
         for card in self.card_list:
-            self.deck.add_card(card)
+            self.deck.insert_card(card)
         self.assertEqual(self.deck.card_list, self.card_list)
         self.deck.shuffle()
         self.assertNotEqual(self.deck.card_list, self.card_list)
