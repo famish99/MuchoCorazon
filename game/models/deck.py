@@ -106,7 +106,8 @@ class Deck(CardUser):
         """
         Search for specific card from the deck
         """
-        pass
+        return NotImplementedError(
+                "Not entirely sure if this will ever be implemented")
 
     def remove_card(self, **kwargs):
         """
