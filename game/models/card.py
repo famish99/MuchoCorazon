@@ -51,12 +51,15 @@ class CardUser(caching.base.CachingMixin, models.Model):
         verbose_name = "Card User"
 
 
-class CardLibrary(CardUser):
+class CardCatalog(CardUser):
     """
     For a whole game module, store all the cards it has available.
     This should not be instantiated for each game session, but only
     when a new game module is added e.g. Tanto Cuore, Magic the Gathering,
     Poker, etc.
+
+
+    -determines what cards get instantiated when game starts
     """
 
     name = models.CharField(max_length=32)
@@ -67,9 +70,9 @@ class CardLibrary(CardUser):
         self._card_dict = {}
 
     class Meta:
-        """ Metadata class for CardLibrary """
+        """ Metadata class for CardCatalog """
         app_label = "game"
-        verbose_name = "Card Library"
+        verbose_name = "Card Catalog"
 
 
 class Card(caching.base.CachingMixin, models.Model):

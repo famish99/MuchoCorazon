@@ -1,7 +1,7 @@
 """
 Card models unit testing
 """
-from game.models.card import CardUser, CardLibrary, Card
+from game.models.card import CardUser, CardCatalog, Card
 from game.models.deck import Deck
 from game.models.session import Session
 from django.test import TestCase
@@ -30,7 +30,7 @@ class CardUserTestCase(TestCase):
     def setUp(self):
         self.session = Session.objects.create()
         self.deck = Deck.objects.create(name="hand", user=self.session)
-        self.lib = CardLibrary.objects.create(name="Seitokai no Ichizon")
+        self.lib = CardCatalog.objects.create(name="Seitokai no Ichizon")
         self.deck.save()
 
     def test_class_name(self):
@@ -38,7 +38,7 @@ class CardUserTestCase(TestCase):
         Check classname saving
         """
         self.assertEqual(self.deck.classname, "CardUser.Deck")
-        self.assertEqual(self.lib.classname, "CardUser.CardLibrary")
+        self.assertEqual(self.lib.classname, "CardUser.CardCatalog")
 
     def test_class_trace(self):
         """
