@@ -1,8 +1,9 @@
 """
 Session models unit testing
 """
+from django.contrib.auth.models import User
 from game.models.session import DeckUser, Session
-from game.models.user import User
+from game.models.user import UserProfile
 from django.test import TestCase
 from game.models.player import Player
 
@@ -13,7 +14,8 @@ class DeckUserTestCase(TestCase):
     """
 
     def setUp(self):
-        self.user = User.objects.create(name="Sugisaki Ken")
+        test_user = User.objects.create(first_name="Ken", last_name="Sugisaki")
+        self.user = UserProfile.objects.create(user=test_user)
         self.session = Session.objects.create()
         self.player = Player.objects.create(
                 session=self.session, user=self.user)

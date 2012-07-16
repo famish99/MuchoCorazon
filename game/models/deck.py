@@ -24,8 +24,8 @@ class Deck(CardUser):
     """
 
     user = models.ForeignKey(DeckUser, related_name="decks")
-    _card_list = PickledObjectField()
     name = models.CharField(max_length=16)
+    _card_list = PickledObjectField()
     show_prop = models.CharField(
             max_length=16, choices=SHOW_CHOICES, null=True)
 

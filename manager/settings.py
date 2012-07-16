@@ -153,3 +153,5 @@ LOGGING = {
         },
     }
 }
+
+AUTH_PROFILE_MODULE = 'game.models.user.UserProfile'
