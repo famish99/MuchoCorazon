@@ -37,3 +37,30 @@ class DeckUserTestCase(TestCase):
         self.assertEqual(
                 DeckUser.objects.get(id=self.session.id).get_class(),
                 self.session)
+
+
+class SessionTestCase(TestCase):
+    """
+    Test associated Session features
+    """
+
+    def setUp(self):
+        name_list = [
+                "Sugisaki_Ken",
+                "Echo_of_Death",
+                "Nakameguro",
+                ]
+        self.user_list = []
+        self.player_list = []
+        self.session = Session.objects.create()
+        for name in name_list:
+            test_user = User.objects.create(username=name)
+            self.user_list.append(UserProfile.objects.create(user=test_user))
+
+    def test_add_player(self):
+        """
+        Test adding players to session
+        """
+        for user in self.user_list:
+            self.player_list.append(self.session.add_player(user))
+        self.assertEqual(self.session.player_list, self.player_list)
