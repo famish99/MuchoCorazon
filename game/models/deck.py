@@ -33,7 +33,8 @@ class Deck(CardUser):
 
     def __init__(self, *args, **kwargs):
         super(Deck, self).__init__(*args, **kwargs)
-        self._card_list = []
+        if not self._card_list:
+            self._card_list = []
     
     def __unicode__(self):
         join_str = ', '

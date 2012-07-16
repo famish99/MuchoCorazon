@@ -16,7 +16,7 @@ class DeckUserTestCase(TestCase):
     def setUp(self):
         test_user = User.objects.create(first_name="Ken", last_name="Sugisaki")
         self.user = UserProfile.objects.create(user=test_user)
-        self.session = Session.objects.create()
+        self.session = Session.objects.create(max_players=1)
         self.player = Player.objects.create(
                 session=self.session, user=self.user)
 
@@ -52,7 +52,7 @@ class SessionTestCase(TestCase):
                 ]
         self.user_list = []
         self.player_list = []
-        self.session = Session.objects.create()
+        self.session = Session.objects.create(max_players=4)
         for name in name_list:
             test_user = User.objects.create(username=name)
             self.user_list.append(UserProfile.objects.create(user=test_user))

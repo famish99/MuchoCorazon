@@ -61,8 +61,12 @@ class Session(DeckUser):
     _player_list = PickledObjectField()
 
     def __init__(self, *args, **kwargs):
+        max_players = kwargs.get("max_players")
+        if "max_players" in kwargs:
+            del kwargs["max_players"]
         super(Session, self).__init__(*args, **kwargs)
-        self._player_list = []
+        if not self._player_list:
+            self._player_list = []
 
     def add_player(self, input_user, **kwargs):
         """

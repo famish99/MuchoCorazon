@@ -21,10 +21,12 @@ class CardTestCase(TestCase):
         """
         self.assertEqual(self.card.__unicode__(), "Shiina Minatsu")
 
+
 class CardCatalogTestCase(TestCase):
     """
     Tests associated 
     """
+
 
 class CardUserTestCase(TestCase):
     """
@@ -33,9 +35,8 @@ class CardUserTestCase(TestCase):
 
     def setUp(self):
         self.session = Session.objects.create()
-        self.deck = Deck.objects.create(name="hand", user=self.session)
+        self.deck = Deck.objects.create(name="Sugisaki Ken's harem", user=self.session)
         self.catalog = CardCatalog.objects.create(name="Seitokai no Ichizon")
-        self.deck.save()
 
     def test_class_name(self):
         """
@@ -55,3 +56,18 @@ class CardUserTestCase(TestCase):
                 CardUser.objects.get(id=self.catalog.id).get_class(),
                 self.catalog)
 
+    def test_deck_persist(self):
+        """
+        Check if deck state is same after trace
+        """
+        self.card_list = [
+                Card.objects.create(name="Sakurano Kurimu"),
+                Card.objects.create(name="Akaba Chizuru"),
+                Card.objects.create(name="Shiina Minatsu"),
+                Card.objects.create(name="Shiina Mafuyu"),
+            ]
+        self.deck.insert_cards(self.card_list)
+        self.deck.save()
+        self.assertEqual(
+                CardUser.objects.get(id=self.deck.id).get_class().card_list,
+                self.deck.card_list)

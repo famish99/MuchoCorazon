@@ -16,7 +16,6 @@ class DeckTestCase(TestCase):
     def setUp(self):
         self.session = Session.objects.create()
         self.deck = Deck.objects.create(name="Sugisaki Ken's harem", user=self.session)
-        self.deck.save()
         self.card_list = [
                 Card.objects.create(name="Sakurano Kurimu"),
                 Card.objects.create(name="Akaba Chizuru"),
@@ -26,12 +25,20 @@ class DeckTestCase(TestCase):
         self.full_deck_str = \
             "Sugisaki Ken's harem: Shiina Mafuyu, Shiina Minatsu, Akaba Chizuru, Sakurano Kurimu"
 
+    def test_save(self):
+        """
+        Check save method works
+        """
+        self.deck.insert_cards(self.card_list)
+        self.deck.save()
+        deck = Deck.objects.get(id=self.deck.id)
+        self.assertEqual(self.deck, deck)
+
     def test_repr(self):
         """
         Check the deck unicode representation
         """
-        for card in self.card_list:
-            self.deck.insert_card(card)
+        self.deck.insert_cards(self.card_list)
         self.assertEqual(self.deck.__unicode__(), self.full_deck_str)
 
     def test_push_pop(self):
