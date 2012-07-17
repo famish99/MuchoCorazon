@@ -16,7 +16,7 @@ class DeckUserTestCase(TestCase):
     def setUp(self):
         test_user = User.objects.create(first_name="Ken", last_name="Sugisaki")
         self.user = UserProfile.objects.create(user=test_user)
-        self.session = Session.objects.create(max_players=1)
+        self.session = Session.objects.create()
         self.player = Player.objects.create(
                 session=self.session, user=self.user)
 
@@ -52,15 +52,36 @@ class SessionTestCase(TestCase):
                 ]
         self.user_list = []
         self.player_list = []
-        self.session = Session.objects.create(max_players=4)
+        self.session = Session.objects.create()
         for name in name_list:
             test_user = User.objects.create(username=name)
             self.user_list.append(UserProfile.objects.create(user=test_user))
 
-    def test_add_player(self):
+    def test_add_remove_player(self):
         """
-        Test adding players to session
+        Test add/remove players to session
         """
         for user in self.user_list:
             self.player_list.append(self.session.add_player(user))
         self.assertEqual(self.session.player_list, self.player_list)
+        # Make sure you can't add player to existing seat
+        self.assertRaises(
+                ValueError,
+                self.session.add_player, self.user_list[0], index=2)
+        self.assertEqual(
+                self.session.remove_player(index=1), self.player_list[1])
+        check_list = [
+                self.player_list[0],
+                None,
+                self.player_list[2]
+                ]
+        self.assertEqual(self.session.player_list, check_list)
+
+    def test_shuffle(self):
+        """
+        Test shuffling players around
+        """
+        for user in self.user_list*10:
+            self.player_list.append(self.session.add_player(user))
+        self.session.shuffle_players()
+        self.assertNotEqual(self.session.player_list, self.player_list)

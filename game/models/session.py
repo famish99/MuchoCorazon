@@ -4,6 +4,7 @@ Module for game models
 from django.db import models
 from picklefield.fields import PickledObjectField
 import caching.base
+import random
 
 
 class DeckUser(caching.base.CachingMixin, models.Model):
@@ -61,9 +62,6 @@ class Session(DeckUser):
     _player_list = PickledObjectField()
 
     def __init__(self, *args, **kwargs):
-        max_players = kwargs.get("max_players")
-        if "max_players" in kwargs:
-            del kwargs["max_players"]
         super(Session, self).__init__(*args, **kwargs)
         if not self._player_list:
             self._player_list = []
@@ -74,6 +72,7 @@ class Session(DeckUser):
 
         @param user: UserProfile of the user who wants to be added to
             game session
+        @param index: Index (seat number) for the player to be added
         @param save: Save model after adding new player (default: True)
         @return: Player object linked to UserProfile and Session.
         """
@@ -81,10 +80,48 @@ class Session(DeckUser):
         new_player = player.Player.objects.create(
                 user=input_user, session=self
                 )
-        self._player_list.append(new_player.id)
+        if "index" in kwargs:
+            index = kwargs.get("index")
+            if self._player_list[index]:
+                raise ValueError(
+                        "Cannot add player, player already exists at seat %d" %
+                        index)
+        else:
+            index = len(self._player_list)
+        self._player_list.insert(index, new_player.id)
         if kwargs.get("save", True):
             self.save()
         return new_player
+
+    def remove_player(self, **kwargs):
+        """
+        Remove a new player from the game session
+
+        @param index: Index (seat number) for the player to be removed
+        @param save: Save model after removing new player (default: True)
+        @return: Player object removed
+        """
+        import game.models.player as player
+        if "index" in kwargs:
+            index = kwargs.get("index")
+            if not self._player_list[index]:
+                raise ValueError(
+                        "Cannot remove player, player does not exists at seat %d" %
+                        index)
+        else:
+            index = -1
+        rem_player = self.players.get(id=self._player_list[index])
+        self._player_list[index] = None
+        if kwargs.get("save", True):
+            self.save()
+        return rem_player
+
+    def shuffle_players(self, **kwargs):
+        """
+        Shuffle player order
+        """
+        random.shuffle(self._player_list)
+        self.save()
 
     @property
     def player_list(self):
@@ -93,7 +130,13 @@ class Session(DeckUser):
 
         @return: A list of Player objects in order
         """
-        return [ self.players.get(id=p_id) for p_id in self._player_list ]
+        p_list = []
+        for item in self._player_list:
+            if item:
+                p_list.append(self.players.get(id=item))
+            else:
+                p_list.append(None)
+        return p_list
 
     class Meta:
         """ Metadata class for Player """
