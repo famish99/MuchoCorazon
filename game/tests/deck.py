@@ -74,11 +74,13 @@ class DeckTestCase(TestCase):
         """
         Test validity of shuffle
         """
-        for card in self.card_list:
+        # Workaround for small deck sizes causing shuffled decks to
+        # retain the original order
+        for card in self.card_list*10:
             self.deck.insert_card(card)
         self.card_list.reverse()
         self.deck.shuffle()
-        self.assertNotEqual(self.deck.card_list, self.card_list)
+        self.assertNotEqual(self.deck.card_list, self.card_list*10)
 
     def test_index_add_remove(self):
         """
