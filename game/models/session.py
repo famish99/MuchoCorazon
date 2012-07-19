@@ -57,14 +57,23 @@ class Session(DeckUser):
     Django model to store game state
     """
 
-    turn = models.PositiveSmallIntegerField(null=True)
-    phase = models.PositiveSmallIntegerField(null=True)
+    turn = models.PositiveSmallIntegerField(default=0)
+    phase = models.PositiveSmallIntegerField(default=0)
     _player_list = PickledObjectField()
 
     def __init__(self, *args, **kwargs):
         super(Session, self).__init__(*args, **kwargs)
         if not self._player_list:
             self._player_list = []
+
+    def next_turn(self, **kwargs):
+        """
+        Advance the gameplay to the next turn
+        """
+        self.turn = self.turn + 1
+        if self.turn >= len(self._player_list):
+            self.turn = 0
+        self.save()
 
     def add_player(self, input_user, **kwargs):
         """

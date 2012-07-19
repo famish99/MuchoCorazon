@@ -57,6 +57,20 @@ class SessionTestCase(TestCase):
             test_user = User.objects.create(username=name)
             self.user_list.append(UserProfile.objects.create(user=test_user))
 
+    def test_next_turn(self):
+        """
+        Test next turn method
+        """
+        for user in self.user_list:
+            self.player_list.append(self.session.add_player(user))
+        self.assertEqual(self.session.turn, 0)
+        self.session.next_turn()
+        self.assertEqual(self.session.turn, 1)
+        self.session.next_turn()
+        self.assertEqual(self.session.turn, 2)
+        self.session.next_turn()
+        self.assertEqual(self.session.turn, 0)
+
     def test_add_remove_player(self):
         """
         Test add/remove players to session
