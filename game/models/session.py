@@ -123,6 +123,17 @@ class Session(DeckUser):
         random.shuffle(self._player_list)
         self.save()
 
+    def swap_players(self, player_a, player_b, **kwargs):
+        """
+        Swap two players around
+
+        @param player_a: index of player to swap
+        @param player_b: index of player to swap
+        """
+        self._player_list[player_a], self._player_list[player_b] = (
+                self._player_list[player_b], self._player_list[player_a])
+        self.save()
+
     @property
     def player_list(self):
         """

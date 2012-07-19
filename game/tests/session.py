@@ -85,3 +85,17 @@ class SessionTestCase(TestCase):
             self.player_list.append(self.session.add_player(user))
         self.session.shuffle_players()
         self.assertNotEqual(self.session.player_list, self.player_list)
+    
+    def test_swap(self):
+        """
+        Test swapping two players around
+        """
+        for user in self.user_list:
+            self.player_list.append(self.session.add_player(user))
+        self.session.swap_players(1, 2)
+        check_list = [
+                self.player_list[0],
+                self.player_list[2],
+                self.player_list[1],
+                ]
+        self.assertEqual(self.session.player_list, check_list)
