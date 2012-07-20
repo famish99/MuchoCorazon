@@ -64,12 +64,16 @@ class SessionTestCase(TestCase):
         for user in self.user_list:
             self.player_list.append(self.session.add_player(user))
         self.assertEqual(self.session.turn, 0)
+        self.assertEqual(self.session.current_player(), self.player_list[0])
         self.session.next_turn()
         self.assertEqual(self.session.turn, 1)
+        self.assertEqual(self.session.current_player(), self.player_list[1])
         self.session.next_turn()
         self.assertEqual(self.session.turn, 2)
+        self.assertEqual(self.session.current_player(), self.player_list[2])
         self.session.next_turn()
-        self.assertEqual(self.session.turn, 0)
+        self.assertEqual(self.session.turn, 3)
+        self.assertEqual(self.session.current_player(), self.player_list[0])
 
     def test_add_remove_player(self):
         """

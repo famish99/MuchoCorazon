@@ -71,9 +71,20 @@ class Session(DeckUser):
         Advance the gameplay to the next turn
         """
         self.turn = self.turn + 1
-        if self.turn >= len(self._player_list):
-            self.turn = 0
         self.save()
+
+    def current_player(self):
+        """
+        Return the current player
+        """
+        player_id = self._player_list[self.turn % len(self._player_list)]
+        return self.players.get(id=player_id)
+
+    def add_phase(self):
+        """
+        Add a phase to the phase list
+        """
+        pass
 
     def add_player(self, input_user, **kwargs):
         """
