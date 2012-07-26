@@ -60,18 +60,43 @@ class Session(DeckUser):
     turn = models.PositiveSmallIntegerField(default=0)
     phase = models.PositiveSmallIntegerField(default=0)
     _player_list = PickledObjectField()
+    phase_list = PickledObjectField()
 
     def __init__(self, *args, **kwargs):
         super(Session, self).__init__(*args, **kwargs)
         if not self._player_list:
             self._player_list = []
+        if not self.phase_list:
+            self.phase_list = []
 
     def next_turn(self, **kwargs):
         """
         Advance the gameplay to the next turn
+
+        @param save: Save model after advancing turn (default: True)
         """
         self.turn = self.turn + 1
-        self.save()
+        if kwargs.get("save", True):
+            self.save()
+
+    def next_phase(self, **kwargs):
+        """
+        Advance the gameplay to the next phase
+
+        @param save: Save model after advancing phase (default: True)
+        """
+        self.phase = self.phase + 1
+        if self.phase >= len(self.phase_list):
+            self.phase = 0
+            self.next_turn(save=False)
+        if kwargs.get("save", True):
+            self.save()
+
+    def current_phase(self):
+        """
+        Return the current phase
+        """
+        return self.phase_list[self.phase]
 
     def current_player(self):
         """
@@ -80,11 +105,16 @@ class Session(DeckUser):
         player_id = self._player_list[self.turn % len(self._player_list)]
         return self.players.get(id=player_id)
 
-    def add_phase(self):
+    def add_phase(self, phase_name, **kwargs):
         """
         Add a phase to the phase list
+
+        @param phase_name: Name of the phase to add
+        @param save: Save model after adding new player (default: True)
         """
-        pass
+        self.phase_list.append(phase_name)
+        if kwargs.get("save", True):
+            self.save()
 
     def add_player(self, input_user, **kwargs):
         """

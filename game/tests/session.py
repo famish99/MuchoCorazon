@@ -57,9 +57,33 @@ class SessionTestCase(TestCase):
             test_user = User.objects.create(username=name)
             self.user_list.append(UserProfile.objects.create(user=test_user))
 
-    def test_next_turn(self):
+    def test_phase_methods(self):
         """
-        Test next turn method
+        Test phase methods
+        """
+        phase_list = [
+                "Kaichou Route",
+                "Mafuyu Route",
+                "Minatsu Route",
+                "Chizuru Route",
+                ]
+        for phase in phase_list:
+            self.session.add_phase(phase)
+        self.assertEqual(phase_list, self.session.phase_list)
+        self.assertEqual(self.session.current_phase(), phase_list[0])
+        self.session.next_phase()
+        self.assertEqual(self.session.current_phase(), phase_list[1])
+        self.session.next_phase()
+        self.assertEqual(self.session.current_phase(), phase_list[2])
+        self.session.next_phase()
+        self.assertEqual(self.session.current_phase(), phase_list[3])
+        self.session.next_phase()
+        self.assertEqual(self.session.current_phase(), phase_list[0])
+        self.assertEqual(self.session.turn, 1)
+
+    def test_turn_methods(self):
+        """
+        Test turn methods
         """
         for user in self.user_list:
             self.player_list.append(self.session.add_player(user))
