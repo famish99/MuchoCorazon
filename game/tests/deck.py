@@ -129,7 +129,7 @@ class DeckTestCase(TestCase):
         """
         Check fetching a single card
         """
-        self.deck.insert_cards(self.card_list*25)
+        self.deck.insert_cards(self.card_list)
         self.assertEqual(self.deck.get_card(1), self.card_list[2])
         check_list = [
                 self.card_list[2],

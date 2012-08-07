@@ -20,6 +20,18 @@ class DeckUser(caching.base.CachingMixin, models.Model):
     def __init__(self, *args, **kwargs):
         super(DeckUser, self).__init__(*args, **kwargs)
 
+    def add_deck(self, name):
+        """
+        Add new deck to DeckUser
+
+        @param name: name of deck to be added
+        @return: deck that was created
+        """
+        import game.models.deck as deck
+
+        deck = deck.Deck.objects.create(user=self, name=name)
+        return deck
+
     def save(self, *args, **kwargs):
         """
         Overwrite the save function to save the class name for referencing
@@ -45,6 +57,15 @@ class DeckUser(caching.base.CachingMixin, models.Model):
         for sub_class in self.classname.lower().split('.')[1:]:
             ptr = ptr.__getattribute__(sub_class)
         return ptr
+
+    @property
+    def deck_list(self):
+        """
+        Present a full list of decks
+
+        @return: A dict of deck objects keyed by deck name
+        """
+        return { deck.name : deck for deck in self.decks.all() }
 
     class Meta:
         """ Metadata class for DeckUser """
@@ -120,7 +141,7 @@ class Session(DeckUser):
         """
         Add a new player to the game session
 
-        @param user: UserProfile of the user who wants to be added to
+        @param input_user: UserProfile of the user who wants to be added to
             game session
         @param index: Index (seat number) for the player to be added
         @param save: Save model after adding new player (default: True)
@@ -151,7 +172,6 @@ class Session(DeckUser):
         @param save: Save model after removing new player (default: True)
         @return: Player object removed
         """
-        import game.models.player as player
         if "index" in kwargs:
             index = kwargs.get("index")
             if not self._player_list[index]:

@@ -14,11 +14,28 @@ class DeckUserTestCase(TestCase):
     """
 
     def setUp(self):
+        self.deck_names = [
+                "Sakurano Kurimu",
+                "Akaba Chizuru",
+                "Shiina Minatsu",
+                "Shiina Mafuyu",
+                ]
         test_user = User.objects.create(first_name="Ken", last_name="Sugisaki")
         self.user = UserProfile.objects.create(user=test_user)
         self.session = Session.objects.create()
         self.player = Player.objects.create(
                 session=self.session, user=self.user)
+
+    def test_add_deck(self):
+        """
+        Test deck adding
+        """
+        deck_list = []
+        for name in self.deck_names:
+            deck_list.append((name, self.player.add_deck(name)))
+        player_decks = self.player.deck_list
+        for deck in deck_list:
+            self.assertEqual(player_decks.get(deck[0]), deck[1])
 
     def test_class_name(self):
         """

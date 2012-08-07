@@ -69,6 +69,15 @@ class CardCatalog(CardUser):
         super(CardUser, self).__init__(*args, **kwargs)
         self._card_dict = {}
 
+    def load_catalog(self, card_module):
+        """
+        Load cards from module into database
+        """
+        from card_module import CARD_LIST
+        
+        for card in CARD_LIST:
+            pass
+
     class Meta:
         """ Metadata class for CardCatalog """
         app_label = "game"
