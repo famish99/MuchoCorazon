@@ -57,6 +57,19 @@ class DeckUser(caching.base.CachingMixin, models.Model):
         for sub_class in self.classname.lower().split('.')[1:]:
             ptr = ptr.__getattribute__(sub_class)
         return ptr
+    
+    @classmethod
+    def draw_cards(cls, from_deck, to_deck, **kwargs):
+        """
+        Streamline common operation of drawing cards
+        """
+        if kwargs.get("all"):
+            num_cards = from_deck.length
+        else:
+            num_cards = kwargs.get("num_cards", 1)
+        for num in range(num_cards):
+            card = from_deck.remove_card()
+            to_deck.insert_card(card)
 
     @property
     def deck_list(self):

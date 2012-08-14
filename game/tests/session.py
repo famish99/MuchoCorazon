@@ -2,8 +2,10 @@
 Session models unit testing
 """
 from django.contrib.auth.models import User
+from django.utils.datastructures import SortedDict
 from game.models.session import DeckUser, Session
 from game.models.user import UserProfile
+from game.models.card import Card
 from django.test import TestCase
 from game.models.player import Player
 
@@ -14,13 +16,24 @@ class DeckUserTestCase(TestCase):
     """
 
     def setUp(self):
-        self.deck_names = [
-                "Sakurano Kurimu",
-                "Akaba Chizuru",
-                "Shiina Minatsu",
-                "Shiina Mafuyu",
-                ]
-        test_user = User.objects.create(first_name="Ken", last_name="Sugisaki")
+        self.test_data = SortedDict([
+                ("FF8", [
+                    Card.objects.create(name="Laguna Loire"),
+                    Card.objects.create(name="Quistis Trepe"),
+                    Card.objects.create(name="Irvine Kinneas"),
+                    ]),
+                ("FF9", [
+                    Card.objects.create(name="Vivi"),
+                    Card.objects.create(name="Garnet"),
+                    Card.objects.create(name="Eiko"),
+                    ]),
+                ("FF12", [
+                    Card.objects.create(name="Vaan"),
+                    Card.objects.create(name="Ashe"),
+                    Card.objects.create(name="Bathier"),
+                    ]),
+                ])
+        test_user = User.objects.create(username="final_fantasy")
         self.user = UserProfile.objects.create(user=test_user)
         self.session = Session.objects.create()
         self.player = Player.objects.create(
@@ -31,7 +44,7 @@ class DeckUserTestCase(TestCase):
         Test deck adding
         """
         deck_list = []
-        for name in self.deck_names:
+        for name in self.test_data.keys():
             deck_list.append((name, self.player.add_deck(name)))
         player_decks = self.player.deck_list
         for deck in deck_list:
@@ -54,6 +67,28 @@ class DeckUserTestCase(TestCase):
         self.assertEqual(
                 DeckUser.objects.get(id=self.session.id).get_class(),
                 self.session)
+
+    def test_draw_card(self):
+        """
+        Check draw engine
+        """
+        deck_list = []
+        for deck_name, cards in self.test_data.items():
+            deck = self.player.add_deck(deck_name)
+            deck_list.append(deck)
+            deck.insert_cards(cards)
+        deck_0 = self.test_data.values()[0][::-1]
+        deck_1 = self.test_data.values()[1][::-1]
+        deck_2 = self.test_data.values()[2][::-1]
+        DeckUser.draw_cards(deck_list[0], deck_list[1])
+        self.assertEqual(deck_list[0].card_list, deck_0[1:])
+        self.assertEqual(deck_list[1].card_list, [deck_0[0]] + deck_1)
+        DeckUser.draw_cards(deck_list[0], deck_list[1], num_cards=2)
+        self.assertEqual(deck_list[0].card_list, [])
+        self.assertEqual(deck_list[1].card_list, deck_0[::-1] + deck_1)
+        DeckUser.draw_cards(deck_list[2], deck_list[1], all=True)
+        self.assertEqual(deck_list[2].card_list, [])
+        self.assertEqual(deck_list[1].card_list, deck_2[::-1] + deck_0[::-1] + deck_1)
 
 
 class SessionTestCase(TestCase):
