@@ -98,9 +98,9 @@ class SessionTestCase(TestCase):
 
     def setUp(self):
         name_list = [
-                "Sugisaki_Ken",
-                "Echo_of_Death",
-                "Nakameguro",
+                "FF7",
+                "FF8",
+                "FF9",
                 ]
         self.user_list = []
         self.player_list = []
@@ -114,10 +114,10 @@ class SessionTestCase(TestCase):
         Test phase methods
         """
         phase_list = [
-                "Kaichou Route",
-                "Mafuyu Route",
-                "Minatsu Route",
-                "Chizuru Route",
+                "Disc 1",
+                "Disc 2",
+                "Disc 3",
+                "Disc 4",
                 ]
         for phase in phase_list:
             self.session.add_phase(phase)
