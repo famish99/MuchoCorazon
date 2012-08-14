@@ -157,6 +157,15 @@ class Deck(CardUser):
         """
         return [ self.cards.get(id=card_id) for card_id in self._card_list ]
 
+    @property
+    def length(self):
+        """
+        Return the number of cards in the deck
+
+        @return: An integer representing the number of cards
+        """
+        return len(self._card_list)
+
     class Meta:
         """ Metadata class for Deck """
         app_label = "game"

@@ -34,6 +34,15 @@ class DeckTestCase(TestCase):
         deck = Deck.objects.get(id=self.deck.id)
         self.assertEqual(self.deck, deck)
 
+    def test_length(self):
+        """
+        Check deck count
+        """
+        self.deck.insert_cards(self.card_list)
+        self.assertEqual(self.deck.length, len(self.card_list))
+        self.deck.remove_cards(len(self.card_list))
+        self.assertEqual(self.deck.length, 0)
+
     def test_repr(self):
         """
         Check the deck unicode representation
