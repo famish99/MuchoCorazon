@@ -5,7 +5,6 @@ from game.models.deck import Deck
 from game.models.session import Session
 from game.models.card import Card
 from django.test import TestCase
-import copy
 
 
 class DeckTestCase(TestCase):
@@ -107,7 +106,7 @@ class DeckTestCase(TestCase):
         """
         Check ability to insert/remove multiple cards at once
         """
-        rev_list = copy.copy(self.card_list)
+        rev_list = self.card_list[:]
         rev_list.reverse()
         # Test adding all the cards
         self.deck.insert_cards(self.card_list)
