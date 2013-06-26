@@ -1,4 +1,6 @@
 from django.conf.urls import patterns, include, url
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+import game.views
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -6,6 +8,8 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     # Examples:
+    url(r'^$', game.views.HomeView.as_view()),
+    url(r'^/games/$', game.views.GameList.as_view()),
     # url(r'^$', 'tanto.views.home', name='home'),
     # url(r'^tanto/', include('tanto.foo.urls')),
 
@@ -15,3 +19,5 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
 )
+
+urlpatterns += staticfiles_urlpatterns()
