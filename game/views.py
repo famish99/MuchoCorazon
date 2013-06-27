@@ -46,14 +46,37 @@ class HomeView(TView):
     """
     template_name = 'home.html'
     page_title = 'Home'
+    session_message = ""
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
+        if self.__class__.session_message:
+            context['message'] = self.__class__.session_message
+            self.__class__.session_message = None
         return context
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.session["message"]:
+            self.__class__.session_message = request.session["message"]
+            request.session["message"] = None
+        response = super(HomeView, self).dispatch(request, *args, **kwargs)
+        return response
+
+
+def logged_view(request):
+    request.session["message"] = {
+            "text": "Successfully logged in!",
+            "type": "alert-success",
+            }
+    return redirect('/')
 
 
 def logout_view(request):
     logout(request)
+    request.session["message"] = {
+            "text": "Successfully logged out",
+            "type": "alert-success",
+            }
     return redirect('/')
 
 

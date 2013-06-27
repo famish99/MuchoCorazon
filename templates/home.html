@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row">
+<div class="container">
+    {% if message %}
+    <div class="alert {{ message.type }}">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message.text }}
+    </div>
+    {% endif %}
     <h3>Welcome to MuchoCorazon!</h3>
     <p>MuchoCorazon will be the home of all your card game needs. Check back for new games.</p>
 </div>
