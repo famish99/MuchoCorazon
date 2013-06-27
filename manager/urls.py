@@ -8,8 +8,10 @@ import game.views
 
 urlpatterns = patterns('',
     # Examples:
+    url(r'', include('social_auth.urls')),
     url(r'^$', game.views.HomeView.as_view()),
-    url(r'^/games/$', game.views.GameList.as_view()),
+    url(r'^games/$', game.views.GameList.as_view()),
+    url(r'^logout/$', game.views.logout_view),
     # url(r'^$', 'tanto.views.home', name='home'),
     # url(r'^tanto/', include('tanto.foo.urls')),
 

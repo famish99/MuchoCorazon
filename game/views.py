@@ -5,6 +5,8 @@ from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 from django.utils.datastructures import SortedDict
+from django.shortcuts import redirect
+from django.contrib.auth import logout
 
 
 def template_factory(base_class):
@@ -37,6 +39,7 @@ def template_factory(base_class):
 TView = template_factory(TemplateView)
 LView = template_factory(ListView)
 
+
 class HomeView(TView):
     """
     View class for home page
@@ -47,6 +50,11 @@ class HomeView(TView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         return context
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')
 
 
 class GameList(LView):

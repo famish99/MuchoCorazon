@@ -6,3 +6,4 @@
 .project
 .pydevproject
 local_settings.py
+secret.py
