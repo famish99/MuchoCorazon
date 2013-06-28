@@ -218,6 +218,15 @@ class Session(DeckUser):
         self.save()
 
     @property
+    def num_players(self):
+        """
+        Return number of connected players
+
+        @return: Player count
+        """
+        return len(self._player_list)
+    
+    @property
     def player_list(self):
         """
         Present a full list of players in order

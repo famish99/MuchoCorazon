@@ -171,6 +171,11 @@ class SessionTestCase(TestCase):
                 ]
         self.assertEqual(self.session.player_list, check_list)
 
+    def test_num_players(self):
+        for user in self.user_list:
+            self.player_list.append(self.session.add_player(user))
+        self.assertEqual(self.session.num_players, len(self.player_list))
+
     def test_shuffle(self):
         """
         Test shuffling players around
