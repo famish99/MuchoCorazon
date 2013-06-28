@@ -66,6 +66,12 @@
             </div>
         </div>
         <div class="container">
+            {% if message %}
+            <div class="alert {{ message.type }}">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message.text }}
+            </div>
+            {% endif %}
             {% block content %}{% endblock %}
         </div>
     </body>

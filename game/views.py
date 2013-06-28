@@ -7,6 +7,7 @@ from django.views.generic.base import TemplateView
 from django.utils.datastructures import SortedDict
 from django.shortcuts import redirect
 from django.contrib.auth import logout
+from game.models.game_info import GameInfo
 
 
 def template_factory(base_class):
@@ -23,11 +24,23 @@ def template_factory(base_class):
                 'bootstrap.js',
                 ]
 
+        session_message = ""
+
+        def dispatch(self, request, *args, **kwargs):
+            if request.session["message"]:
+                self.__class__.session_message = request.session["message"]
+                request.session["message"] = None
+            response = super(BaseView, self).dispatch(request, *args, **kwargs)
+            return response
+
         def get_context_data(self, **kwargs):
             """
             Give base site context
             """
             context = super(BaseView, self).get_context_data(**kwargs)
+            if self.__class__.session_message:
+                context['message'] = self.__class__.session_message
+                self.__class__.session_message = None
             context['nav_list'] = self.__class__.nav_list
             context['page_title'] = self.__class__.page_title
             context['script_list'] = self.__class__.script_list
@@ -46,21 +59,6 @@ class HomeView(TView):
     """
     template_name = 'home.html'
     page_title = 'Home'
-    session_message = ""
-
-    def get_context_data(self, **kwargs):
-        context = super(HomeView, self).get_context_data(**kwargs)
-        if self.__class__.session_message:
-            context['message'] = self.__class__.session_message
-            self.__class__.session_message = None
-        return context
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.session["message"]:
-            self.__class__.session_message = request.session["message"]
-            request.session["message"] = None
-        response = super(HomeView, self).dispatch(request, *args, **kwargs)
-        return response
 
 
 def logged_view(request):
@@ -86,4 +84,6 @@ class GameList(LView):
     """
     template_name = 'game_list.html'
     page_title = 'Games List'
+    model = GameInfo
+
 

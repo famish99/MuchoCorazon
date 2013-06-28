@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>Games List</h3>
+<div class="row">
+    <ul>
+        {% for game in object_list %}
+        <li><a href="{{ game.ref }}">{{ game.name }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+
