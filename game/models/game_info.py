@@ -11,8 +11,8 @@ class GameInfo(caching.base.CachingMixin, models.Model):
     Class containing metadata about games installed
     """
 
-    name = models.CharField(max_length=128)
-    ref = models.CharField(max_length=32)
+    name = models.CharField(max_length=128, unique=True)
+    ref = models.CharField(max_length=32, unique=True)
     desc = models.CharField(max_length=1024)
 
     objects = caching.base.CachingManager()
