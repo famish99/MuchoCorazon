@@ -8,6 +8,7 @@ from django.utils.datastructures import SortedDict
 from django.shortcuts import redirect
 from django.contrib.auth import logout
 from game.models.game_info import GameInfo
+from game.models.user import UserProfile
 
 
 def template_factory(base_class):
@@ -27,7 +28,7 @@ def template_factory(base_class):
         session_message = ""
 
         def dispatch(self, request, *args, **kwargs):
-            if request.session["message"]:
+            if request.session.get("message"):
                 self.__class__.session_message = request.session["message"]
                 request.session["message"] = None
             response = super(BaseView, self).dispatch(request, *args, **kwargs)
@@ -62,9 +63,19 @@ class HomeView(TView):
 
 
 def logged_view(request):
+    if not UserProfile.objects.filter(user=request.user).count():
+        UserProfile.objects.create(user=request.user)
     request.session["message"] = {
             "text": "Successfully logged in!",
             "type": "alert-success",
+            }
+    return redirect('/')
+
+
+def login_error_view(request):
+    request.session["message"] = {
+            "text": "Authentication Error",
+            "type": "alert-error",
             }
     return redirect('/')
 

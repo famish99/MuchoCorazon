@@ -11,7 +11,7 @@ class UserProfile(caching.base.CachingMixin, models.Model):
     Django model to store user info
     """
 
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, related_name="profile")
 
     objects = caching.base.CachingManager()
 

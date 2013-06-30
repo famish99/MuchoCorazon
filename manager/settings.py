@@ -173,8 +173,9 @@ AUTHENTICATION_BACKENDS = (
 
 GOOGLE_DISPLAY_NAME = "MuchoCorazon"
 
-LOGIN_URL = 'game.views.LoginView'
+LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/logged/'
+LOGIN_ERROR_URL = '/login-error/'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
