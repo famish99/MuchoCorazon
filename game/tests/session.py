@@ -35,7 +35,7 @@ class DeckUserTestCase(TestCase):
                 ])
         test_user = User.objects.create(username="final_fantasy")
         self.user = UserProfile.objects.create(user=test_user)
-        self.session = Session.objects.create()
+        self.session = Session.objects.create(max_players=1)
         self.player = Player.objects.create(
                 session=self.session, user=self.user)
 
@@ -104,7 +104,7 @@ class SessionTestCase(TestCase):
                 ]
         self.user_list = []
         self.player_list = []
-        self.session = Session.objects.create()
+        self.session = Session.objects.create(name="test_name", max_players=len(name_list))
         for name in name_list:
             test_user = User.objects.create(username=name)
             self.user_list.append(UserProfile.objects.create(user=test_user))
@@ -158,12 +158,16 @@ class SessionTestCase(TestCase):
         for user in self.user_list:
             self.player_list.append(self.session.add_player(user))
         self.assertEqual(self.session.player_list, self.player_list)
+        # Test for max_players sanity checking
+        self.assertRaises(
+                ValueError,
+                self.session.add_player, self.user_list[0])
+        self.assertEqual(
+                self.session.remove_player(index=1), self.player_list[1])
         # Make sure you can't add player to existing seat
         self.assertRaises(
                 ValueError,
                 self.session.add_player, self.user_list[0], index=2)
-        self.assertEqual(
-                self.session.remove_player(index=1), self.player_list[1])
         check_list = [
                 self.player_list[0],
                 None,
@@ -180,6 +184,7 @@ class SessionTestCase(TestCase):
         """
         Test shuffling players around
         """
+        self.session = Session.objects.create(name="test_name", max_players=10*len(self.user_list))
         for user in self.user_list*10:
             self.player_list.append(self.session.add_player(user))
         self.session.shuffle_players()

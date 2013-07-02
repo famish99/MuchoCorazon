@@ -13,7 +13,7 @@ class DeckTestCase(TestCase):
     """
 
     def setUp(self):
-        self.session = Session.objects.create()
+        self.session = Session.objects.create(max_players=1)
         self.deck = Deck.objects.create(name="Sugisaki Ken's harem", user=self.session)
         self.card_list = [
                 Card.objects.create(name="Sakurano Kurimu"),

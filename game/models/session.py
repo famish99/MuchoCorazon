@@ -91,8 +91,10 @@ class Session(DeckUser):
     Django model to store game state
     """
 
+    name = models.CharField(max_length=64)
     turn = models.PositiveSmallIntegerField(default=0)
     phase = models.PositiveSmallIntegerField(default=0)
+    max_players = models.PositiveSmallIntegerField()
     _player_list = PickledObjectField()
     phase_list = PickledObjectField()
 
@@ -161,6 +163,8 @@ class Session(DeckUser):
         @return: Player object linked to UserProfile and Session.
         """
         import game.models.player as player
+        if self.num_players >= self.max_players:
+            raise ValueError("Cannot add more than max players")
         new_player = player.Player.objects.create(
                 user=input_user, session=self
                 )
@@ -224,7 +228,11 @@ class Session(DeckUser):
 
         @return: Player count
         """
-        return len(self._player_list)
+        cnt = 0
+        for player in self._player_list:
+            if player:
+                cnt = cnt + 1
+        return cnt
     
     @property
     def player_list(self):
