@@ -21,4 +21,4 @@ class UserProfile(caching.base.CachingMixin, models.Model):
     class Meta:
         """ Metadata class for Player """
         app_label = "game"
-        verbose_name = "User info"
+        verbose_name = "User Profile"

@@ -21,3 +21,4 @@ class GameInfo(caching.base.CachingMixin, models.Model):
         """ Metadata class for GameInfo """
         app_label = "game"
         verbose_name = "Game information"
+        verbose_name_plural = "Game information"
