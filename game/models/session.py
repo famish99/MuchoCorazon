@@ -91,11 +91,12 @@ class Session(DeckUser):
     Django model to store game state
     """
 
-    name = models.CharField(max_length=64)
-    password = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, blank=True)
+    password = models.CharField(max_length=64, blank=True)
     turn = models.PositiveSmallIntegerField(default=0)
     phase = models.PositiveSmallIntegerField(default=0)
     max_players = models.PositiveSmallIntegerField()
+    status = models.CharField(max_length=16, default="waiting")
     _player_list = PickledObjectField()
     phase_list = PickledObjectField()
 
