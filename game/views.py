@@ -25,23 +25,14 @@ def template_factory(base_class):
                 'bootstrap.js',
                 ]
 
-        session_message = ""
-
-        def dispatch(self, request, *args, **kwargs):
-            if request.session.get("message"):
-                self.__class__.session_message = request.session["message"]
-                request.session["message"] = None
-            response = super(BaseView, self).dispatch(request, *args, **kwargs)
-            return response
-
         def get_context_data(self, **kwargs):
             """
             Give base site context
             """
             context = super(BaseView, self).get_context_data(**kwargs)
-            if self.__class__.session_message:
-                context['message'] = self.__class__.session_message
-                self.__class__.session_message = None
+            if self.request.session.get("message"):
+                context['message'] = self.request.session.get("message")
+                self.request.session["message"] = None
             context['nav_list'] = self.__class__.nav_list
             context['page_title'] = self.__class__.page_title
             context['script_list'] = self.__class__.script_list
