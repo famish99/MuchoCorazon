@@ -20,9 +20,12 @@ def template_factory(base_class):
                 {'name': "Games List", 'ref': "/games/"},
             ]
 
-        script_list = [
+        base_script_list = [
                 'jquery.js',
                 'bootstrap.js',
+                ]
+
+        script_list = [
                 ]
 
         def get_context_data(self, **kwargs):
@@ -35,7 +38,7 @@ def template_factory(base_class):
                 self.request.session["message"] = None
             context['nav_list'] = self.__class__.nav_list
             context['page_title'] = self.__class__.page_title
-            context['script_list'] = self.__class__.script_list
+            context['script_list'] = self.__class__.base_script_list + self.__class__.script_list
             return context
 
     return BaseView
