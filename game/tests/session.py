@@ -98,9 +98,11 @@ class SessionTestCase(TestCase):
 
     def setUp(self):
         name_list = [
-                "FF7",
-                "FF8",
-                "FF9",
+                "Senjougahara Hitagi",
+                "Hachikuji Mayoi",
+                "Kanbaru Suruga",
+                "Sengoku Nadeko",
+                "Hanekawa Tsubasa",
                 ]
         self.user_list = []
         self.player_list = []
@@ -114,10 +116,11 @@ class SessionTestCase(TestCase):
         Test phase methods
         """
         phase_list = [
-                "Disc 1",
-                "Disc 2",
-                "Disc 3",
-                "Disc 4",
+                "Hitagi Crab",
+                "Mayoi Snail",
+                "Suruga Monkey",
+                "Nadeko Snake",
+                "Tsubasa Cat",
                 ]
         for phase in phase_list:
             self.session.add_phase(phase)
@@ -129,6 +132,8 @@ class SessionTestCase(TestCase):
         self.assertEqual(self.session.current_phase(), phase_list[2])
         self.session.next_phase()
         self.assertEqual(self.session.current_phase(), phase_list[3])
+        self.session.next_phase()
+        self.assertEqual(self.session.current_phase(), phase_list[4])
         self.session.next_phase()
         self.assertEqual(self.session.current_phase(), phase_list[0])
         self.assertEqual(self.session.turn, 1)
@@ -149,6 +154,12 @@ class SessionTestCase(TestCase):
         self.assertEqual(self.session.current_player(), self.player_list[2])
         self.session.next_turn()
         self.assertEqual(self.session.turn, 3)
+        self.assertEqual(self.session.current_player(), self.player_list[3])
+        self.session.next_turn()
+        self.assertEqual(self.session.turn, 4)
+        self.assertEqual(self.session.current_player(), self.player_list[4])
+        self.session.next_turn()
+        self.assertEqual(self.session.turn, 5)
         self.assertEqual(self.session.current_player(), self.player_list[0])
 
     def test_add_remove_player(self):
@@ -171,7 +182,9 @@ class SessionTestCase(TestCase):
         check_list = [
                 self.player_list[0],
                 None,
-                self.player_list[2]
+                self.player_list[2],
+                self.player_list[3],
+                self.player_list[4],
                 ]
         self.assertEqual(self.session.player_list, check_list)
 
@@ -201,5 +214,7 @@ class SessionTestCase(TestCase):
                 self.player_list[0],
                 self.player_list[2],
                 self.player_list[1],
+                self.player_list[3],
+                self.player_list[4],
                 ]
         self.assertEqual(self.session.player_list, check_list)
